@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # e-Tickets JO — Clean Start V8
 
 Front dynamique, panier, compte, paiement mock, QR, vérification et liste "Mes billets".
@@ -20,3 +21,7 @@ python manage.py runserver
 ```powershell
 python manage.py test
 ```
+=======
+# etickets-v10
+EXAMEN BLOC 3 STUDI
+>>>>>>> 3c9edfb2ffc61519caa5c935350a5ebbdb7da0fc
