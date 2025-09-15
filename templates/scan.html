@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Scanner un billet</h1>
+<p>Collez la <code>ticket_key</code> (ou scannez via lecteur USB) puis validez :</p>
+<input id="code" style="width:60%" placeholder="ticket_key"/>
+<button onclick="doVerify()">Vérifier</button>
+<pre id="out"></pre>
+<script>
+  async function doVerify(){
+    const key = document.getElementById('code').value.trim();
+    const r = await fetch('/api/tickets/verify/', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','X-CSRFToken': getCookie('csrftoken')},
+      credentials: 'same-origin',
+      body: JSON.stringify({ticket_key: key})
+    });
+    const ct = r.headers.get('content-type')||'';
+    const data = ct.includes('application/json') ? await r.json() : {ok:false, text: await r.text()};
+    document.getElementById('out').textContent = JSON.stringify(data, null, 2);
+  }
+</script>
+{% endblock %}

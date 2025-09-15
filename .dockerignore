@@ -1,0 +1,13 @@
+# Ignore local artifacts
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.log
+.git
+.gitignore
+node_modules
+# DB/media (kept on host via bind-mount)
+media/
+static/

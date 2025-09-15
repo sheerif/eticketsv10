@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load formatting %}
+{% block content %}
+<h1>Mes billets</h1>
+{% if tickets %}
+  <div class="grid">
+  {% for t in tickets %}
+    <div class="card">
+      <div class="row" style="justify-content:space-between;">
+        <div>
+          <h3 style="margin:0">{{ t.offer.name }}</h3>
+          <div class="muted">Commande #{{ t.order_id }}</div>
+        </div>
+        <div class="muted">Billet #{{ forloop.counter }}</div>
+      </div>
+
+      <div style="margin:.5rem 0 .75rem">
+        <span class="kbd keyline" title="{{ t.ticket_key }}">{{ t.ticket_key|shortkey:12 }}</span>
+        <div class="row" style="margin-top:.4rem">
+          <button class="btn secondary" onclick="copyKey('{{ t.ticket_key }}')">Copier la clé</button>
+          {% if t.qr_image %}
+            <a class="btn secondary" href="{{ t.qr_image.url }}" download>Télécharger le QR</a>
+          {% endif %}
+        </div>
+      </div>
+
+      {% if t.qr_image %}
+      <img src="{{ t.qr_image.url }}" alt="QR" style="max-width:180px; border:1px solid #e5e7eb; border-radius:8px;"/>
+      {% else %}
+      <div class="muted">QR non disponible</div>
+      {% endif %}
+    </div>
+  {% endfor %}
+  </div>
+{% else %}
+  <p>Aucun billet pour le moment.</p>
+{% endif %}
+
+<script>
+async function copyKey(text){
+  try {
+    await navigator.clipboard.writeText(text);
+    alert('Clé copié dans le presse-papiers');
+  } catch(e){
+    // fallback
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    alert('Clé copié');
+  }
+}
+</script>
+{% endblock %}

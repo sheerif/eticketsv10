@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Offres</h1>
+<noscript><div style='padding:.6rem .8rem; border:1px solid #ef4444; color:#991b1b; border-radius:.5rem; margin-bottom:1rem;'>Activez JavaScript pour utiliser le panier.</div></noscript>
+<div style="display:flex; gap:2rem; align-items:flex-start;">
+  <div style="flex:2">
+    <div class="grid">
+      {% for o in offers %}
+      <div class="card">
+        <h3>{{ o.name }}</h3>
+        <p>Type: {{ o.get_offer_type_display }}</p>
+        <p>Prix: {{ o.price_eur }} €</p>
+        <button onclick="addToCart({{ o.id }})">Ajouter</button>
+      </div>
+      {% empty %}
+      <p>Aucune offre pour l'instant. Lance <code>python manage.py seed_offers</code> puis recharge.</p>
+      {% endfor %}
+    </div>
+  </div>
+  <div style="flex:1">
+    <div class="card">
+      <h3>Panier</h3>
+      <div id="errors" style="color:#b91c1c;"></div>
+      <div id="cart"></div>
+      <div id="emptyMsg" class="muted" style="margin-top:.5rem;">Panier vide — ajoutez des billets pour procéder au paiement.</div>
+      <div id="total" style="margin-top:.5rem; font-weight:bold;"></div>
+      <div style="margin-top:1rem; display:flex; gap:.5rem; flex-wrap:wrap;">
+        <button id="payBtn" class="btn" onclick="onCheckout()">Payer (mock)</button>
+        <button onclick="clearCart()">Vider</button>
+      </div>
+    </div>
+  </div>
+</div>
+<p style="margin-top:1rem;"><a href="/scan/">→ Aller à la page Scan</a></p>
+
+
+
+
+<script>
+/* Cart JS: AJAX first, robust GET fallback; no syntax errors. */
+(function(){
+  function getCookie(name){
+    const m = document.cookie.match('(^|;)\s*'+name+'\s*=\s*([^;]+)');
+    return m ? m.pop() : '';
+  }
+  async function fetchCart(){
+    const r = await fetch('/api/cart/', {credentials:'same-origin'});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    return await r.json();
+  }
+  window.refreshCart = async function(){
+    try{
+      const data = await fetchCart();
+      const items = data.items || [];
+      const el = document.getElementById('cart');
+      const total = document.getElementById('total');
+      const emptyMsg = document.getElementById('emptyMsg');
+      if(items.length === 0){
+        el.innerHTML = '';
+        if(total) total.textContent = '';
+        if(emptyMsg) emptyMsg.style.display = 'block';
+        return;
+      }
+      if(emptyMsg) emptyMsg.style.display = 'none';
+      el.innerHTML = items.map(function(i){
+        return (
+          '<div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin:.25rem 0;">' +
+            '<span>'+ i.name +' — '+ i.price.toFixed(2) +' €</span>' +
+            '<span>' +
+              '<a class="btn secondary" href="/orders/cart/update/'+ i.offer_id +'/?qty='+(i.qty-1)+'&next=/offers/" onclick="return updateQty('+ i.offer_id +','+(i.qty-1)+');">-</a> ' +
+              '<strong>'+ i.qty +'</strong> ' +
+              '<a class="btn secondary" href="/orders/cart/update/'+ i.offer_id +'/?qty='+(i.qty+1)+'&next=/offers/" onclick="return updateQty('+ i.offer_id +','+(i.qty+1)+');">+</a> ' +
+              '<a class="btn secondary" href="/orders/cart/update/'+ i.offer_id +'/?qty=0&next=/offers/" onclick="return updateQty('+ i.offer_id +',0);">Suppr</a>' +
+            '</span>' +
+            '<span>'+ i.line_total.toFixed(2) +' €</span>' +
+          '</div>'
+        );
+      }).join('');
+      if(total) total.textContent = 'Total: ' + data.total.toFixed(2) + ' €';
+    }catch(err){
+      console.error('refreshCart failed:', err);
+    }
+  };
+  window.addToCart = async function(offerId){
+    try{
+      const r = await fetch('/api/cart/add/', {
+        method:'POST',
+        headers:{'Content-Type':'application/json','X-CSRFToken':getCookie('csrftoken')||''},
+        credentials:'same-origin',
+        body: JSON.stringify({offer_id: offerId, qty: 1})
+      });
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      await refreshCart();
+      return false;
+    }catch(e){
+      console.warn('addToCart ajax failed -> GET fallback', e);
+      return true;
+    }
+  };
+  window.updateQty = async function(offerId, qty){
+    try{
+      const r = await fetch('/api/cart/update/', {
+        method:'POST',
+        headers:{'Content-Type':'application/json','X-CSRFToken':getCookie('csrftoken')||''},
+        credentials:'same-origin',
+        body: JSON.stringify({offer_id: offerId, qty: qty})
+      });
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      await refreshCart();
+      return false;
+    }catch(e){
+      console.warn('updateQty ajax failed -> GET fallback', e);
+      return true;
+    }
+  };
+  window.clearCart = async function(){
+    try{
+      const r = await fetch('/api/cart/clear/', {
+        method:'POST',
+        headers:{'X-CSRFToken':getCookie('csrftoken')||''},
+        credentials:'same-origin'
+      });
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      await refreshCart();
+      return false;
+    }catch(e){
+      console.warn('clearCart ajax failed -> GET fallback', e);
+      return true;
+    }
+  };
+  window.onCheckout = function(){
+    window.location.href = '/orders/checkout/';
+    return false;
+  };
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', refreshCart);
+  }else{
+    refreshCart();
+  }
+})();
+</script>
+
+{% endblock %}
+

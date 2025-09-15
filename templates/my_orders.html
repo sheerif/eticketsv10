@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Mes achats</h1>
+{% if orders %}
+  <div class="grid">
+    {% for o in orders %}
+      <div class="card">
+        <h3>Commande #{{ o.id }}</h3>
+        <p>{{ o.created_at }}</p>
+        <ul>
+          {% for it in o.items.all %}
+            <li>{{ it.offer.name }} × {{ it.quantity }} — {{ it.offer.price_eur }} €</li>
+          {% endfor %}
+        </ul>
+        <p><strong>Total: {{ o.total_eur|floatformat:2 }} €</strong></p>
+        <p><a href="/orders/{{ o.id }}/invoice.pdf" target="_blank">Télécharger la facture (PDF)</a></p>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>Aucun achat.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="max-width:860px; margin:auto">
+  <h1 style="margin-top:0">e‑Tickets JO — Bienvenue</h1>
+  <p>Choisissez vos billets, payez (mock), et récupérez vos QR dans <strong>Mes billets</strong>.</p>
+  <p class="muted">Vous pouvez parcourir les offres sans compte. Un compte est demandé uniquement au paiement.</p>
+  <div class="row" style="margin-top:1rem">
+    <a class="btn" href="/offers/">Voir les offres</a>
+    <a class="btn secondary" href="/login/?next=/offers/">Se connecter</a>
+    <a class="btn secondary" href="/signup/?next=/offers/">Créer un compte</a>
+  </div>
+</div>
+{% endblock %}
