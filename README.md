@@ -1,4 +1,4 @@
-https://etickets-v10.fly.dev/
+https://etickets-v10.fly.dev/  <------------------------------ ERREUR DE LIEN DANS LE DOCUMENT D'EXAMEN RENDU. LE LIEN EST CORRIGE. 
 # e-Tickets JO — Clean Start V8
 
 Front dynamique, panier, compte, paiement mock, QR, vérification et liste "Mes billets".
