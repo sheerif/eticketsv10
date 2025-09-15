@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+https://etickets-v10.fly.dev/
 # e-Tickets JO — Clean Start V8
 
 Front dynamique, panier, compte, paiement mock, QR, vérification et liste "Mes billets".
