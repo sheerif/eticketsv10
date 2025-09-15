@@ -24,4 +24,4 @@ python manage.py test
 =======
 # etickets-v10
 EXAMEN BLOC 3 STUDI
->>>>>>> 3c9edfb2ffc61519caa5c935350a5ebbdb7da0fc
+3c9edfb2ffc61519caa5c935350a5ebbdb7da0fc
