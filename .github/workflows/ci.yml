@@ -1,94 +1,42 @@
+@"
 name: CI
-<<<<<<< HEAD
-
-=======
->>>>>>> a0eb5ef (ci: enforce coverage >= 80%)
 on:
   push:
     branches: [ main, develop ]
   pull_request:
     branches: [ main, develop ]
-
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-<<<<<<< HEAD
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Cache pip
-        uses: actions/cache@v4
-=======
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-
       - uses: actions/cache@v4
->>>>>>> a0eb5ef (ci: enforce coverage >= 80%)
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-
-<<<<<<< HEAD
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Show Django & Python versions
-        run: |
-          python -V
-          python -c "import django, sys; print('Django', django.get_version()); print('Platform', sys.platform)"
-
-      # Not strictly necessary for Django tests (they create a test DB),
-      # but useful to catch migration issues early.
-      - name: Check migrations
-=======
       - name: Install
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          # (si coverage n'est pas dans requirements.txt, ajoute:)
+          # si "coverage" n'est pas dans requirements.txt :
           # pip install coverage
-
       - name: Migrations check
->>>>>>> a0eb5ef (ci: enforce coverage >= 80%)
         run: |
           python manage.py makemigrations --check --dry-run
           python manage.py migrate --noinput
-
-<<<<<<< HEAD
-      - name: Run tests with coverage (fail if < 70%)
-        run: |
-          coverage run manage.py test
-          coverage report -m --fail-under=70
-          coverage html
-
-      - name: Upload HTML coverage
-=======
       - name: Tests + Coverage (>= 80%)
         run: |
           coverage run manage.py test
           coverage report -m --fail-under=80
           coverage html
-
       - name: Upload coverage HTML
->>>>>>> a0eb5ef (ci: enforce coverage >= 80%)
         uses: actions/upload-artifact@v4
         with:
           name: htmlcov
           path: htmlcov/
-<<<<<<< HEAD
-=======
-
->>>>>>> a0eb5ef (ci: enforce coverage >= 80%)
+"@ | Set-Content .github/workflows/ci.yml -Encoding UTF8
