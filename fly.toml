@@ -4,8 +4,7 @@ primary_region = "cdg"
 [build]
 
 [deploy]
-  release_command = "python manage.py migrate --noinput"
-
+  release_command = "python manage.py migrate"
 [env]
   DJANGO_SETTINGS_MODULE = "etickets.settings"
   PYTHONUNBUFFERED = "1"
