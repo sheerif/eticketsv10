@@ -187,7 +187,7 @@ fly ssh console -C "python manage.py migrate"
 fly ssh console -C "python manage.py createsuperuser"
 ```
 
-<<<<<<< HEAD
+
 ## 6. Sécurité (extraits appliqués)
 - Hash MDP Django + validateurs (longueur min 10, etc.)
 - CSRF activé, cookies sécurisés (selon env)
@@ -196,7 +196,13 @@ fly ssh console -C "python manage.py createsuperuser"
 - Clés : `user_key` (à l’inscription), `purchase_key` (à l’achat), `ticket_key` = hash(user_key + purchase_key)
 
 ## 7. Structure projet
-=======
+accounts/  # auth & vues login/signup
+offers/    # modèles & vues d'offres (+ seed_offers)
+orders/    # panier, paiement mock, facture PDF
+tickets/   # modèle Ticket + API verify
+templates/ # templates Django (Bootstrap)
+etickets/  # settings/urls/asgi/wsgi
+
 ---
 
 ## 7) Sécurité (rappels)
