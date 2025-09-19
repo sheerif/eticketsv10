@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # eTickets JO — etickets-v10   Démo : https://etickets-v10.fly.dev/
 
 ## 1. Fonctionnalités
@@ -229,7 +228,7 @@ etickets/  # settings/urls/asgi/wsgi
 ```
 
 ---
-<<<<<<< HEAD
+
 *Exam BLOC 3 — rendu organisé (doc, Trello, lien déployé).*
 =======
 
