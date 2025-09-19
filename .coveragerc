@@ -5,6 +5,19 @@ omit =
     */.venv/*
     */venv/*
     manage.py
+<<<<<<< HEAD
 
 [report]
 skip_empty = True
+=======
+    etickets/asgi.py
+    etickets/wsgi.py
+    etickets/settings.py
+
+[report]
+show_missing = True
+exclude_lines =
+    pragma: no cover
+    if __name__ == .__main__.
+    if settings.DEBUG
+>>>>>>> 9ea62a1 (feat: import projet (refonte front, sécurité env, README, tests))

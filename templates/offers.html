@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+<<<<<<< HEAD
 {% block content %}
 <h1>Offres</h1>
 <noscript><div style='padding:.6rem .8rem; border:1px solid #ef4444; color:#991b1b; border-radius:.5rem; margin-bottom:1rem;'>Activez JavaScript pour utiliser le panier.</div></noscript>
@@ -27,16 +28,68 @@
       <div style="margin-top:1rem; display:flex; gap:.5rem; flex-wrap:wrap;">
         <button id="payBtn" class="btn" onclick="onCheckout()">Payer (mock)</button>
         <button onclick="clearCart()">Vider</button>
+=======
+{% block title %}Offres · e‑Tickets JO{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Offres</h1>
+<noscript><div class="alert alert-warning">Activez JavaScript pour utiliser le panier.</div></noscript>
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="row row-cols-1 row-cols-sm-2 g-3">
+      {% for o in offers %}
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body d-flex flex-column">
+            <div class="d-flex justify-content-between align-items-start">
+              <h3 class="h5 mb-1">{{ o.name }}</h3>
+              <span class="badge badge-soft">{{ o.get_offer_type_display }}</span>
+            </div>
+            <p class="text-muted mb-4">Prix <span class="price">{{ o.price_eur }} €</span></p>
+            <div class="mt-auto">
+              <button class="btn btn-primary w-100" onclick="addToCart({{ o.id }})">Ajouter au panier</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col">
+        <div class="alert alert-info">Aucune offre pour l'instant. Lance <code>python manage.py seed_offers</code> puis recharge.</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card shadow-sm sticky-card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h2 class="h5 mb-0">Panier</h2>
+          <button class="btn btn-sm btn-outline-secondary" onclick="resetCart()">Vider</button>
+        </div>
+        <div id="cart-items" class="vstack gap-2"></div>
+        <hr/>
+        <div class="d-flex justify-content-between">
+          <strong>Total</strong>
+          <strong id="cart-total">0 €</strong>
+        </div>
+        <div class="d-grid mt-3">
+          <button class="btn btn-success" onclick="onCheckout()">Passer au paiement</button>
+        </div>
+>>>>>>> 9ea62a1 (feat: import projet (refonte front, sécurité env, README, tests))
       </div>
     </div>
   </div>
 </div>
+<<<<<<< HEAD
 <p style="margin-top:1rem;"><a href="/scan/">→ Aller à la page Scan</a></p>
+=======
+
+>>>>>>> 9ea62a1 (feat: import projet (refonte front, sécurité env, README, tests))
 
 
 
 
 <script>
+<<<<<<< HEAD
 /* Cart JS: AJAX first, robust GET fallback; no syntax errors. */
 (function(){
   function getCookie(name){
@@ -137,8 +190,50 @@
   }else{
     refreshCart();
   }
+=======
+(function(){
+  function toNumber(x){ var n = Number(x); return isNaN(n) ? 0 : n; }
+  function fmtEUR(v){ try { return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR'}).format(v); } catch(e){ return (v||0).toFixed ? v.toFixed(2)+' €' : (v+' €'); } }
+  function refreshCart(){
+    fetch('/api/cart/', { headers:{'Accept':'application/json'} })
+      .then(r => r.ok ? r.json() : {items:[], total:0})
+      .then(data => {
+        const list = document.getElementById('cart-items');
+        const total = document.getElementById('cart-total');
+        if(!list || !total) return;
+        list.innerHTML = '';
+        let sum = 0;
+        (data.items || []).forEach(it => {
+          const qty = toNumber(it.qty || it.quantity);
+          const price = toNumber(it.price);              // prix unitaire
+          const line = ('line_total' in it) ? toNumber(it.line_total) : (price * qty);
+          sum += line;
+          const row = document.createElement('div');
+          row.className = 'd-flex align-items-center justify-content-between border rounded p-2';
+          row.innerHTML = `<div class="me-2"><strong>${it.name}</strong><div class="text-muted small">x${qty}</div></div>
+                           <div class="fw-semibold">${fmtEUR(line)}</div>`;
+          list.appendChild(row);
+        });
+        const totalVal = (typeof data.total !== 'undefined') ? toNumber(data.total) : sum;
+        total.textContent = fmtEUR(totalVal);
+      })
+      .catch(()=>{});
+  }
+
+  window.addToCart = function(offerId){
+    window.location.href = '/orders/cart/add/' + offerId + '/';
+  };
+  window.resetCart = function(){ window.location.href = '/orders/cart/clear/'; };
+  window.onCheckout = function(){ window.location.href = '/orders/checkout/'; return false; };
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', refreshCart);
+  else refreshCart();
+>>>>>>> 9ea62a1 (feat: import projet (refonte front, sécurité env, README, tests))
 })();
 </script>
 
 {% endblock %}
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9ea62a1 (feat: import projet (refonte front, sécurité env, README, tests))

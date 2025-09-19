@@ -22,3 +22,14 @@ static/
 # IDE
 .vscode/
 .idea/
+<<<<<<< HEAD
+=======
+# Envs
+.env.*
+# Coverage / test artifacts
+.coverage
+htmlcov/
+# OS
+.DS_Store
+Thumbs.db
+>>>>>>> 9ea62a1 (feat: import projet (refonte front, sécurité env, README, tests))

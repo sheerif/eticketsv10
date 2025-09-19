@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+<<<<<<< HEAD
 {% block content %}
 <h1>Scanner un billet</h1>
 <p>Collez la <code>ticket_key</code> (ou scannez via lecteur USB) puis validez :</p>
@@ -18,5 +19,91 @@
     const data = ct.includes('application/json') ? await r.json() : {ok:false, text: await r.text()};
     document.getElementById('out').textContent = JSON.stringify(data, null, 2);
   }
+=======
+{% block title %}Scan · e‑Tickets JO{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Scanner / vérifier un ticket</h1>
+{% if not user.is_authenticated %}
+<div class="alert alert-warning">Vous devez être connecté pour vérifier un ticket. <a class="alert-link" href="{% url 'login' %}?next=/scan/">Se connecter</a></div>
+{% endif %}
+<p class="text-muted">Collez ou scannez la <span class="kbd">clé</span> (ex: <code>TCK-...-3:abcd1234</code>) puis validez. La vérification est faite via l'API <code>/api/tickets/verify/</code>.</p>
+
+{% if not user.is_authenticated %}
+<div class="alert alert-warning mt-2">Vous devez être connecté pour vérifier un ticket.
+  <a class="alert-link" href="{% url 'login' %}?next=/scan/">Se connecter</a>
+</div>
+<script>
+  // AUTH_GUARD_REDIRECT
+  setTimeout(function(){
+    try{
+      const next = encodeURIComponent('/scan/');
+      window.location.href = '/login/?next=' + next;
+    }catch(e){}
+  }, 500);
+</script>
+{% endif %}
+
+<form class="row gy-2 gx-2" id="scan-form">
+  <div class="col-12 col-sm-8 col-md-6 col-lg-5">
+    <input id="code" class="form-control" placeholder="TCK-...:checksum" autofocus />
+  </div>
+  <div class="col-auto">
+    <button class="btn btn-primary">Vérifier</button>
+  </div>
+</form>
+<div id="scan-result" class="mt-3"></div>
+<script>
+(function(){
+  function getCookie(name){
+    const m = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return m ? m.pop() : '';
+  }
+  function setResult(ok, msg){
+    const box = document.getElementById('scan-result');
+    if(!box) return;
+    box.innerHTML = '<div class="alert ' + (ok?'alert-success':'alert-danger') + '">' + msg + '</div>';
+  }
+  // PARAM_PREFILL
+  (function(){
+    try{
+      const p = new URLSearchParams(window.location.search);
+      const k = p.get('k');
+      if(k){
+        const inp = document.getElementById('code');
+        if(inp){ inp.value = k; }
+      }
+    }catch(e){}
+  })();
+  document.getElementById('scan-form').addEventListener('submit', function(ev){
+    ev.preventDefault();
+    const key = document.getElementById('code').value.trim();
+    if(!key){ return; }
+    fetch('/api/tickets/verify/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
+      },
+      body: JSON.stringify({ ticket_key: key })
+    }).then(async (r) => {
+        let data = {};
+        try {
+          const ct = r.headers.get('content-type') || '';
+          if(ct.includes('application/json')) { data = await r.json(); }
+          else { data = {error: 'Non‑JSON response'}; }
+        } catch(e){}
+        return { status: r.status, data };
+      })
+      .then(({status, data}) => {
+        if(status >= 200 && status < 300 && data.ok){
+          setResult(true, 'Ticket OK — Offre : <strong>' + data.offer + '</strong> (id ' + data.ticket_id + ')');
+        }else{
+          setResult(false, data.error || 'Ticket invalide');
+        }
+      })
+      .catch(() => setResult(false, 'Erreur réseau'));
+  });
+})();
+>>>>>>> 9ea62a1 (feat: import projet (refonte front, sécurité env, README, tests))
 </script>
 {% endblock %}

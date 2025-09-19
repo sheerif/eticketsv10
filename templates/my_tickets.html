@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+<<<<<<< HEAD
 {% load formatting %}
 {% block content %}
 <h1>Mes billets</h1>
@@ -51,6 +52,78 @@ async function copyKey(text){
     document.body.removeChild(ta);
     alert('Clé copié');
   }
+=======
+{% block title %}Mes tickets · e‑Tickets JO{% endblock %}
+{% block content %}
+<h1 class="h3 mb-4">Mes tickets</h1>
+{% if tickets %}
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead>
+        <tr>
+          <th>Code (clé)</th>
+          <th class="d-none d-sm-table-cell">QR</th>
+          <th>Offre</th>
+          <th>Commande</th>
+          <th>État</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in tickets %}
+        <tr>
+          <td style="max-width:420px">
+            <div class="d-flex align-items-center gap-2">
+              <code class="text-break" id="key-{{ t.id }}">{{ t.ticket_key }}</code>
+              <button class="btn btn-sm btn-outline-secondary" onclick="copyKey('{{ t.id }}')">Copier</button>
+            </div>
+          </td>
+          <td class="d-none d-sm-table-cell" style="width:60px">
+            {% if t.qr_image %}
+              <a href="{{ t.qr_image.url }}" target="_blank" title="Ouvrir le QR">
+                <img src="{{ t.qr_image.url }}" alt="QR {{ t.id }}" style="height:48px;width:48px;object-fit:contain;border-radius:.25rem;border:1px solid #e9ecef;padding:2px;background:#fff">
+              </a>
+            {% else %}
+              <span class="text-muted small">—</span>
+            {% endif %}
+          </td>
+          <td>{{ t.offer.name }}</td>
+          <td>#{{ t.order.id }}</td>
+          <td>
+            {% if t.is_scanned %}
+              <span class="badge bg-success">Scanné</span>
+            {% else %}
+              <span class="badge bg-secondary">Valide</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <div class="alert alert-info">Aucun ticket disponible.</div>
+{% endif %}
+
+<script>
+function copyKey(id){
+  try {
+    const el = document.getElementById('key-'+id);
+    if(!el) return;
+    const text = el.textContent.trim();
+    navigator.clipboard.writeText(text).then(()=>{
+      alert('Clé copiée dans le presse-papier.');
+    }).catch(()=>{
+      // Fallback
+      const area = document.createElement('textarea');
+      area.value = text;
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand('copy');
+      area.remove();
+      alert('Clé copiée.');
+    });
+  } catch(e){}
+>>>>>>> 9ea62a1 (feat: import projet (refonte front, sécurité env, README, tests))
 }
 </script>
 {% endblock %}

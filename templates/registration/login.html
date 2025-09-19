@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+<<<<<<< HEAD
 {% block content %}
 <h1>Se connecter</h1>
 <form method="post">
@@ -7,4 +8,23 @@
   <button type="submit">Connexion</button>
 </form>
 <p>Pas de compte ? <a href="/signup/?next={{ request.GET.next|default:'/offers/' }}">Créer un compte</a></p>
+=======
+{% block title %}Se connecter · e‑Tickets JO{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Se connecter</h1>
+<form method="post" class="row gy-3">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  {% for field in form %}
+  <div class="col-12 col-md-6">
+    <label class="form-label">{{ field.label }}</label>
+    {{ field }}
+    {% if field.errors %}<div class="invalid-feedback d-block">{{ field.errors|striptags }}</div>{% endif %}
+  </div>
+  {% endfor %}
+  <div class="col-12">
+    <button class="btn btn-primary w-auto">Connexion</button>
+  </div>
+</form>
+>>>>>>> 9ea62a1 (feat: import projet (refonte front, sécurité env, README, tests))
 {% endblock %}
