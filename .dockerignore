@@ -1,13 +1,27 @@
-# Ignore local artifacts
-.venv
-__pycache__
-*.pyc
+# Python & cache
+__pycache__/
+*.py[cod]
 *.pyo
 *.pyd
-*.log
-.git
-.gitignore
-node_modules
-# DB/media (kept on host via bind-mount)
+*.so
+
+# Virtual env
+.venv/
+venv/
+
+# Django runtime
+db.sqlite3
 media/
-static/
+staticfiles/
+
+# Tests & reports
+.coverage
+htmlcov/
+
+# VCS
+.git/
+.gitignore
+
+# OS
+.DS_Store
+Thumbs.db
