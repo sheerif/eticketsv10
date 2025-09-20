@@ -4,7 +4,7 @@ primary_region = "cdg"
 [build]
 
 [deploy]
-  release_command = "python manage.py migrate"
+  release_command = "sh -c 'python manage.py migrate && python manage.py collectstatic --noinput'"
 [env]
   DJANGO_SETTINGS_MODULE = "etickets.settings"
   PYTHONUNBUFFERED = "1"
@@ -20,7 +20,7 @@ primary_region = "cdg"
   processes = ["app"]
 
 [processes]
-  app = "python manage.py runserver 0.0.0.0:8000"
+  app = "gunicorn etickets.wsgi:application --bind 0.0.0.0:8000"
 
 [[mounts]]
   source = "media_data"
