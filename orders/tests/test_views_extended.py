@@ -50,7 +50,7 @@ class OrdersViewsExtendedTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Solo Athlétisme')
         self.assertContains(response, 'Duo Natation')
-        self.assertContains(response, self.order.created_at.strftime('%Y-%m-%d'))
+        self.assertContains(response, self.order.created_at.strftime('%d/%m/%Y'))
     
     def test_my_orders_empty_list(self):
         """Test affichage quand aucune commande"""
