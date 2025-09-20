@@ -13,8 +13,24 @@ class Ticket(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     offer = models.ForeignKey(Offer, on_delete=models.PROTECT)
-    ticket_key = models.CharField(max_length=128, unique=True, editable=False)
+    ticket_key = models.CharField(
+        max_length=128, 
+        unique=True, 
+        editable=False,
+        db_index=True,  # Database index for fast lookups
+        help_text="Unique ticket key with checksum for verification"
+    )
     qr_image = models.ImageField(upload_to="qr/", blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)  # Track creation time
+    verified_at = models.DateTimeField(null=True, blank=True)  # Track verification
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['user', 'order'], name='tickets_user_order_idx'),
+            models.Index(fields=['order', 'offer'], name='tickets_order_offer_idx'),
+            models.Index(fields=['created_at'], name='tickets_created_at_idx'),
+        ]
+        ordering = ['-created_at']
 
     @classmethod
     def create_from(cls, user: User, order: Order, offer: Offer):

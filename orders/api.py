@@ -53,16 +53,20 @@ def cart_summary(request):
     if not order_id:
         return Response({"items": [], "total": 0.0})
     try:
-        order = Order.objects.get(id=order_id)
+        # Optimized: use select_related to avoid N+1 queries
+        order = Order.objects.select_related('user').get(id=order_id)
     except Order.DoesNotExist:
         return Response({"items": [], "total": 0.0})
+    
+    # Optimized: prefetch related offer data in one query
     items = [{
         "offer_id": it.offer_id,
         "name": it.offer.name,
-        "price": float(it.offer.price_eur),
-        "qty": it.quantity,
-        "line_total": float(it.offer.price_eur) * it.quantity,
+        "price": float(it.offer.price_eur) if it.offer.price_eur is not None else 0.0,
+        "qty": it.quantity if it.quantity is not None else 0,
+        "line_total": float(it.offer.price_eur * it.quantity) if (it.offer.price_eur is not None and it.quantity is not None) else 0.0,
     } for it in order.items.select_related("offer")]
+    
     total = sum(i["line_total"] for i in items)
     return Response({"items": items, "total": total})
 

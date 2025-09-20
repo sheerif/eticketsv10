@@ -1,0 +1,3 @@
+# Dossier media pour les QR codes des tickets
+# Ce dossier est automatiquement créé par Django
+# Les fichiers QR codes sont générés dynamiquement lors de la création de tickets

@@ -1,129 +1,69 @@
 {% extends "base.html" %}
-<<<<<<< HEAD
 {% load formatting %}
+{% block title %}Mes tickets · e‑Tickets JO{% endblock %}
 {% block content %}
-<h1>Mes billets</h1>
+<h1 class="h3 mb-3">Mes tickets</h1>
 {% if tickets %}
-  <div class="grid">
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
   {% for t in tickets %}
-    <div class="card">
-      <div class="row" style="justify-content:space-between;">
-        <div>
-          <h3 style="margin:0">{{ t.offer.name }}</h3>
-          <div class="muted">Commande #{{ t.order_id }}</div>
+    <div class="col">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <h5 class="card-title mb-0">{{ t.offer.name }}</h5>
+            <small class="text-muted">Ticket #{{ forloop.counter }}</small>
+          </div>
+          <p class="text-muted small mb-3">Commande #{{ t.order_id }}</p>
+          
+          <div class="mb-3">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <code class="text-break small">{{ t.ticket_key|shortkey:12 }}</code>
+              <button class="btn btn-sm btn-outline-secondary" onclick="copyKey('{{ t.ticket_key }}')">
+                Copier
+              </button>
+            </div>
+            {% if t.qr_image %}
+            <div class="text-center">
+              <img src="{{ t.qr_image.url }}" alt="QR Code" class="img-fluid" style="max-width: 150px;">
+              <div class="mt-2">
+                <a href="{{ t.qr_image.url }}" class="btn btn-sm btn-outline-primary" download>
+                  Télécharger QR
+                </a>
+              </div>
+            </div>
+            {% else %}
+            <div class="text-muted small">QR non disponible</div>
+            {% endif %}
+          </div>
         </div>
-        <div class="muted">Billet #{{ forloop.counter }}</div>
       </div>
-
-      <div style="margin:.5rem 0 .75rem">
-        <span class="kbd keyline" title="{{ t.ticket_key }}">{{ t.ticket_key|shortkey:12 }}</span>
-        <div class="row" style="margin-top:.4rem">
-          <button class="btn secondary" onclick="copyKey('{{ t.ticket_key }}')">Copier la clé</button>
-          {% if t.qr_image %}
-            <a class="btn secondary" href="{{ t.qr_image.url }}" download>Télécharger le QR</a>
-          {% endif %}
-        </div>
-      </div>
-
-      {% if t.qr_image %}
-      <img src="{{ t.qr_image.url }}" alt="QR" style="max-width:180px; border:1px solid #e5e7eb; border-radius:8px;"/>
-      {% else %}
-      <div class="muted">QR non disponible</div>
-      {% endif %}
     </div>
   {% endfor %}
   </div>
 {% else %}
-  <p>Aucun billet pour le moment.</p>
-{% endif %}
-
-<script>
-async function copyKey(text){
-  try {
-    await navigator.clipboard.writeText(text);
-    alert('Clé copié dans le presse-papiers');
-  } catch(e){
-    // fallback
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    alert('Clé copié');
-  }
-=======
-{% block title %}Mes tickets · e‑Tickets JO{% endblock %}
-{% block content %}
-<h1 class="h3 mb-4">Mes tickets</h1>
-{% if tickets %}
-  <div class="table-responsive">
-    <table class="table align-middle">
-      <thead>
-        <tr>
-          <th>Code (clé)</th>
-          <th class="d-none d-sm-table-cell">QR</th>
-          <th>Offre</th>
-          <th>Commande</th>
-          <th>État</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for t in tickets %}
-        <tr>
-          <td style="max-width:420px">
-            <div class="d-flex align-items-center gap-2">
-              <code class="text-break" id="key-{{ t.id }}">{{ t.ticket_key }}</code>
-              <button class="btn btn-sm btn-outline-secondary" onclick="copyKey('{{ t.id }}')">Copier</button>
-            </div>
-          </td>
-          <td class="d-none d-sm-table-cell" style="width:60px">
-            {% if t.qr_image %}
-              <a href="{{ t.qr_image.url }}" target="_blank" title="Ouvrir le QR">
-                <img src="{{ t.qr_image.url }}" alt="QR {{ t.id }}" style="height:48px;width:48px;object-fit:contain;border-radius:.25rem;border:1px solid #e9ecef;padding:2px;background:#fff">
-              </a>
-            {% else %}
-              <span class="text-muted small">—</span>
-            {% endif %}
-          </td>
-          <td>{{ t.offer.name }}</td>
-          <td>#{{ t.order.id }}</td>
-          <td>
-            {% if t.is_scanned %}
-              <span class="badge bg-success">Scanné</span>
-            {% else %}
-              <span class="badge bg-secondary">Valide</span>
-            {% endif %}
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+  <div class="alert alert-info">
+    <h5>Aucun ticket trouvé</h5>
+    <p class="mb-0">Vous n'avez pas encore de tickets. <a href="/offers/" class="alert-link">Voir les offres</a></p>
   </div>
-{% else %}
-  <div class="alert alert-info">Aucun ticket disponible.</div>
 {% endif %}
 
 <script>
-function copyKey(id){
+async function copyKey(key) {
   try {
-    const el = document.getElementById('key-'+id);
-    if(!el) return;
-    const text = el.textContent.trim();
-    navigator.clipboard.writeText(text).then(()=>{
-      alert('Clé copiée dans le presse-papier.');
-    }).catch(()=>{
-      // Fallback
-      const area = document.createElement('textarea');
-      area.value = text;
-      document.body.appendChild(area);
-      area.select();
-      document.execCommand('copy');
-      area.remove();
-      alert('Clé copiée.');
-    });
-  } catch(e){}
->>>>>>> 9ea62a1 (feat: import projet (refonte front, sécurité env, README, tests))
+    await navigator.clipboard.writeText(key);
+    // Retour visuel simple
+    const btn = event.target;
+    const originalText = btn.textContent;
+    btn.textContent = '✓ Copié';
+    btn.classList.add('btn-success');
+    setTimeout(() => {
+      btn.textContent = originalText;
+      btn.classList.remove('btn-success');
+    }, 2000);
+  } catch (err) {
+    console.error('Erreur de copie:', err);
+    alert('Impossible de copier. Clé: ' + key);
+  }
 }
 </script>
 {% endblock %}

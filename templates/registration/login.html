@@ -1,14 +1,4 @@
 {% extends "base.html" %}
-<<<<<<< HEAD
-{% block content %}
-<h1>Se connecter</h1>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Connexion</button>
-</form>
-<p>Pas de compte ? <a href="/signup/?next={{ request.GET.next|default:'/offers/' }}">Créer un compte</a></p>
-=======
 {% block title %}Se connecter · e‑Tickets JO{% endblock %}
 {% block content %}
 <h1 class="h3 mb-3">Se connecter</h1>
@@ -23,8 +13,8 @@
   </div>
   {% endfor %}
   <div class="col-12">
-    <button class="btn btn-primary w-auto">Connexion</button>
+    <button type="submit" class="btn btn-primary">Se connecter</button>
+    <a href="{% url 'signup' %}" class="btn btn-outline-primary">Créer un compte</a>
   </div>
 </form>
->>>>>>> 9ea62a1 (feat: import projet (refonte front, sécurité env, README, tests))
 {% endblock %}

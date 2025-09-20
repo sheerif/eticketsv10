@@ -31,9 +31,12 @@ class CheckoutTicketTests(TestCase):
         self.client.post("/api/cart/add/", data={"offer_id": self.offer.id, "qty": 2})
 
         # Patch Ticket.create_from to avoid QR side effects and missing fields
+        call_count = 0
         def fake_create_from(user, order, offer):
-            # Create minimal Ticket bypassing QR
-            t = Ticket.objects.create(user=user, order=order, offer=offer, ticket_key="dummy:abcd1234")
+            nonlocal call_count
+            call_count += 1
+            # Create minimal Ticket bypassing QR with unique key
+            t = Ticket.objects.create(user=user, order=order, offer=offer, ticket_key=f"dummy:abcd{call_count:04d}")
             return t
 
         with patch("orders.api.Ticket.create_from", side_effect=fake_create_from):

@@ -1,36 +1,151 @@
 {% extends "base.html" %}
-<<<<<<< HEAD
+
+{% block title %}Bienvenue · e‑Tickets JO 2024{% endblock %}
+
 {% block content %}
-<div class="card" style="max-width:860px; margin:auto">
-  <h1 style="margin-top:0">e‑Tickets JO — Bienvenue</h1>
-  <p>Choisissez vos billets, payez (mock), et récupérez vos QR dans <strong>Mes billets</strong>.</p>
-  <p class="muted">Vous pouvez parcourir les offres sans compte. Un compte est demandé uniquement au paiement.</p>
-  <div class="row" style="margin-top:1rem">
-    <a class="btn" href="/offers/">Voir les offres</a>
-    <a class="btn secondary" href="/login/?next=/offers/">Se connecter</a>
-    <a class="btn secondary" href="/signup/?next=/offers/">Créer un compte</a>
+<!-- Hero Section -->
+<div class="hero-section text-white py-4 py-md-5 px-3 px-md-4 mb-4 mb-md-5">
+  <div class="text-center text-md-start">
+    <h1 class="display-5 fw-bold mb-3">
+      <span class="d-block d-md-inline">🏆 Jeux Olympiques</span>
+      <span class="d-block d-md-inline">Paris 2024</span>
+    </h1>
+    <p class="lead mb-4">Vivez l'émotion des Jeux ! Réservez vos billets officiels pour les plus grandes compétitions sportives.</p>
+    <div class="d-grid d-md-flex gap-2 gap-md-3 justify-content-md-start">
+      <a href="/offers/" class="btn btn-light btn-lg">🎫 Voir les billets</a>
+      {% if user.is_authenticated %}
+        <a href="/my/tickets/" class="btn btn-outline-light btn-lg">📱 Mes billets</a>
+      {% else %}
+        <a href="/signup/" class="btn btn-outline-light btn-lg">✨ S'inscrire</a>
+      {% endif %}
+    </div>
   </div>
 </div>
-=======
-{% block title %}Accueil · e‑Tickets JO{% endblock %}
-{% block content %}
-<section class="hero">
-  <div class="row align-items-center">
-    <div class="col-lg-7">
-      <h1 class="display-6 fw-bold mb-3">e‑Tickets JO — Bienvenue</h1>
-      <p class="lead mb-4">Choisissez vos billets, payez (mock) et recevez vos tickets instantanément. Consultez vos commandes &amp; scannez les entrées.</p>
-      <div class="d-flex gap-2">
-        <a href="/offers/" class="btn btn-primary btn-lg">Les offres</a>
-        <a href="{% url 'my_tickets' %}" class="btn btn-outline-primary btn-lg">Mes tickets</a>
+
+<!-- Sports populaires -->
+<div class="mb-4 mb-md-5">
+  <h2 class="h4 text-center mb-4">� Sports à l'affiche</h2>
+  <div class="row g-2 g-md-3">
+    <div class="col-3 col-md-2">
+      <div class="text-center p-2 p-md-3">
+        <div class="fs-1 mb-1">🏃‍♂️</div>
+        <small class="d-block fw-medium">Athlétisme</small>
       </div>
     </div>
-    <div class="col-lg-5 mt-4 mt-lg-0">
-      <div class="p-4 bg-white border rounded-4 shadow-sm">
-        <h5 class="mb-3 d-flex align-items-center gap-2">Bachelor Développeur d'application Python <span class="badge rounded-pill bg-warning text-dark">STUDI</span></h5>
-        <p class="mb-0 text-muted small">Ce site est une démo : aucun paiement réel n’est effectué.</p>
+    <div class="col-3 col-md-2">
+      <div class="text-center p-2 p-md-3">
+        <div class="fs-1 mb-1">🏊‍♀️</div>
+        <small class="d-block fw-medium">Natation</small>
+      </div>
+    </div>
+    <div class="col-3 col-md-2">
+      <div class="text-center p-2 p-md-3">
+        <div class="fs-1 mb-1">�‍♂️</div>
+        <small class="d-block fw-medium">Cyclisme</small>
+      </div>
+    </div>
+    <div class="col-3 col-md-2">
+      <div class="text-center p-2 p-md-3">
+        <div class="fs-1 mb-1">⚽</div>
+        <small class="d-block fw-medium">Football</small>
+      </div>
+    </div>
+    <div class="col-3 col-md-2">
+      <div class="text-center p-2 p-md-3">
+        <div class="fs-1 mb-1">�</div>
+        <small class="d-block fw-medium">Basketball</small>
+      </div>
+    </div>
+    <div class="col-3 col-md-2">
+      <div class="text-center p-2 p-md-3">
+        <div class="fs-1 mb-1">🤸‍♀️</div>
+        <small class="d-block fw-medium">Gymnastique</small>
       </div>
     </div>
   </div>
-</section>
->>>>>>> 9ea62a1 (feat: import projet (refonte front, sécurité env, README, tests))
+</div>
+
+<!-- Features -->
+<div class="row g-3 g-md-4 mb-4 mb-md-5">
+  <div class="col-12 col-md-4">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body text-center">
+        <div class="fs-2 text-primary mb-3">⚡</div>
+        <h5 class="fw-bold mb-2">Instantané</h5>
+        <p class="text-muted mb-0 small">Billets livrés immédiatement</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-4">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body text-center">
+        <div class="fs-2 text-success mb-3">📱</div>
+        <h5 class="fw-bold mb-2">Mobile</h5>
+        <p class="text-muted mb-0 small">QR codes sécurisés</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-4">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body text-center">
+        <div class="fs-2 text-warning mb-3">🛡️</div>
+        <h5 class="fw-bold mb-2">Sécurisé</h5>
+        <p class="text-muted mb-0 small">Paiements protégés</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Demo notice -->
+<div class="alert alert-warning border-0 mb-4">
+  <div class="d-flex align-items-start gap-3">
+    <div class="fs-5">🎓</div>
+    <div>
+      <h6 class="mb-1">Projet STUDI - Bachelor Python</h6>
+      <p class="mb-0 small">Site de démonstration : aucun paiement réel</p>
+    </div>
+  </div>
+</div>
+
+{% if user.is_authenticated %}
+<!-- Tableau de bord utilisateur -->
+<div class="row g-3">
+  <div class="col-12 col-md-6">
+    <div class="card border-primary h-100">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">📱 Mes billets</h5>
+      </div>
+      <div class="card-body">
+        <p class="mb-3">Vos billets avec QR codes</p>
+        <a href="/my/tickets/" class="btn btn-primary">Consulter</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-6">
+    <div class="card border-success h-100">
+      <div class="card-header bg-success text-white">
+        <h5 class="mb-0">📋 Mes commandes</h5>
+      </div>
+      <div class="card-body">
+        <p class="mb-3">Historique et factures</p>
+        <a href="/my/orders/" class="btn btn-success">Consulter</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% else %}
+<!-- Appel à l'action -->
+<div class="text-center">
+  <div class="card bg-primary text-white border-0">
+    <div class="card-body py-4">
+      <h3 class="mb-3">🎯 Prêt pour les JO ?</h3>
+      <p class="mb-4">Créez votre compte et découvrez tous les événements</p>
+      <div class="d-grid d-md-flex gap-2 justify-content-md-center">
+        <a href="/signup/" class="btn btn-light btn-lg">S'inscrire</a>
+        <a href="/login/" class="btn btn-outline-light btn-lg">Se connecter</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
 {% endblock %}

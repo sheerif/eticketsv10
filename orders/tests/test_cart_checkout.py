@@ -12,7 +12,7 @@ class CartCheckoutTests(TestCase):
 
     def test_cart_add_summary_update_clear(self):
         # add item
-        r = self.client.post('/api/cart/add/', {'offer_id': self.offer.id, 'quantity': 2})
+        r = self.client.post('/api/cart/add/', {'offer_id': self.offer.id, 'qty': 2})
         self.assertEqual(r.status_code, 200)
         # summary
         r = self.client.get('/api/cart/')
@@ -21,7 +21,7 @@ class CartCheckoutTests(TestCase):
         self.assertEqual(len(data['items']), 1)
         self.assertAlmostEqual(data['total'], 100.0, places=2)
         # update
-        r = self.client.post('/api/cart/update/', {'offer_id': self.offer.id, 'quantity': 1})
+        r = self.client.post('/api/cart/update/', {'offer_id': self.offer.id, 'qty': 1})
         self.assertEqual(r.status_code, 200)
         r = self.client.get('/api/cart/')
         self.assertEqual(r.json()['total'], 50.0)
@@ -34,10 +34,10 @@ class CartCheckoutTests(TestCase):
         # login
         self.client.login(username='buyer', password='Password123!')
         # add to cart
-        self.client.post('/api/cart/add/', {'offer_id': self.offer.id, 'quantity': 2})
+        self.client.post('/api/cart/add/', {'offer_id': self.offer.id, 'qty': 2})
         # checkout
         r = self.client.post('/api/cart/checkout/')
-        self.assertEqual(r.status_code, 302)  # redirect to /my/tickets/
+        self.assertEqual(r.status_code, 200)  # API returns JSON, not redirect
         # tickets created
         self.assertEqual(Ticket.objects.filter(user=self.user).count(), 2)
         # media file written (at least for one)

@@ -1,30 +1,40 @@
 {% extends "base.html" %}
-<<<<<<< HEAD
-{% block content %}
-<h1>Créer un compte</h1>
-<form method="post" action="/signup/?next={{ next }}">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Créer mon compte</button>
-</form>
-<p>Déjà inscrit ? <a href="/login/?next={{ next }}">Se connecter</a></p>
-=======
 {% block title %}Créer un compte · e‑Tickets JO{% endblock %}
 {% block content %}
-<h1 class="h3 mb-3">Créer un compte</h1>
-<form method="post" class="row gy-3" novalidate>
-  {% csrf_token %}
-  {{ form.non_field_errors }}
-  {% for field in form %}
-  <div class="col-12 col-md-6">
-    <label class="form-label">{{ field.label }}</label>
-    {{ field }}
-    {% if field.errors %}<div class="invalid-feedback d-block">{{ field.errors|striptags }}</div>{% endif %}
+<div class="row justify-content-center">
+  <div class="col-12 col-md-6 col-lg-4">
+    <h1 class="h3 mb-4">Créer un compte</h1>
+    <form method="post" action="{% url 'signup' %}{% if next %}?next={{ next|urlencode }}{% endif %}" class="needs-validation" novalidate>
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      {% for field in form %}
+      <div class="mb-3">
+        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+        {% if field.field.widget.input_type == 'password' %}
+          <input type="password" class="form-control{% if field.errors %} is-invalid{% endif %}" 
+                 id="{{ field.id_for_label }}" name="{{ field.name }}" 
+                 value="{{ field.value|default:'' }}" required>
+        {% else %}
+          <input type="{{ field.field.widget.input_type|default:'text' }}" 
+                 class="form-control{% if field.errors %} is-invalid{% endif %}" 
+                 id="{{ field.id_for_label }}" name="{{ field.name }}" 
+                 value="{{ field.value|default:'' }}" required>
+        {% endif %}
+        {% if field.errors %}
+          <div class="invalid-feedback">{{ field.errors|striptags }}</div>
+        {% endif %}
+        {% if field.help_text %}
+          <div class="form-text">{{ field.help_text|striptags }}</div>
+        {% endif %}
+      </div>
+      {% endfor %}
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary">Créer mon compte</button>
+      </div>
+    </form>
+    <div class="text-center mt-3">
+      <p class="mb-0">Déjà inscrit ? <a href="{% url 'login' %}{% if next %}?next={{ next|urlencode }}{% endif %}">Se connecter</a></p>
+    </div>
   </div>
-  {% endfor %}
-  <div class="col-12">
-    <button class="btn btn-primary">S'inscrire</button>
-  </div>
-</form>
->>>>>>> 9ea62a1 (feat: import projet (refonte front, sécurité env, README, tests))
+</div>
 {% endblock %}

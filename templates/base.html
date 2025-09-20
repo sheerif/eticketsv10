@@ -1,68 +1,14 @@
-<<<<<<< HEAD
-=======
 {% load static %}
->>>>>>> 9ea62a1 (feat: import projet (refonte front, sécurité env, README, tests))
 <!doctype html>
 <html lang="fr">
   <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<<<<<<< HEAD
-    <title>e-Tickets JO — Clean Start</title>
-    <style>
-      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 2rem; }
-      .grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(260px,1fr)); gap: 1rem; }
-      .card { border: 1px solid #e5e7eb; border-radius: 12px; padding: 1rem 1.25rem; }
-      button { padding: .5rem .75rem; border-radius: .5rem; border: 1px solid #111827; background: #111827; color: white; cursor: pointer; }
-    
-      .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-             background:#0f172a; color:#fff; padding:.15rem .35rem; border-radius:.3rem; font-size:.85rem; }
-      .muted { color:#475569; }
-      .btn { padding:.4rem .6rem; border-radius:.5rem; border:1px solid #111827; background:#111827; color:white; cursor:pointer; }
-      button[disabled], .btn[disabled] { opacity:.5; cursor:not-allowed; }
-      .btn.secondary { background:#e5e7eb; color:#111827; border-color:#e5e7eb; }
-      .row { display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
-      .keyline { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:block; max-width:100%; }
-    </style>
-  </head>
-  <body>
-    <header>
-      <a href="/">Accueil</a> · <a href="/offers/">Offres</a> · <a href="/admin/">Admin</a>
-      <span style="float:right;">
-        {% if request.user.is_authenticated %}
-          <a href="/my/tickets/">Mes billets</a> · <a href="/my/orders/">Mes achats</a> · <a href="/logout/?next=/offers/">Se déconnecter</a>
-        {% else %}
-          <a href="/signup/?next=/offers/">Créer un compte</a> · <a href="/login/?next=/offers/">Se connecter</a>
-        {% endif %}
-      </span>
-    </header>
-    <hr/>
-
-{% if messages %}
-  <div style="margin:.5rem 0 1rem">
-    {% for message in messages %}
-      <div style="padding:.6rem .8rem; border-radius:.5rem; margin-bottom:.4rem; background:#ecfeff; border:1px solid #06b6d4; color:#0e7490;">
-        {{ message }}
-      </div>
-    {% endfor %}
-  </div>
-{% endif %}
-
-    {% block content %}{% endblock %}
-    <script>
-      async function fetchCsrf(){ try{ await fetch('/offers/', {credentials:'same-origin'});}catch(e){} }
-      function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(';').shift();
-      }
-    </script>
-=======
     <title>{% block title %}e‑Tickets JO{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/theme.css' %}">
   
-  <!-- FRONT_VERSION: v3.1 -->
+  <!-- FRONT_VERSION: v3.2 - Stable -->
 </head>
   <body>
     <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
@@ -116,6 +62,6 @@
 </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
->>>>>>> 9ea62a1 (feat: import projet (refonte front, sécurité env, README, tests))
+    {% block scripts %}{% endblock %}
   </body>
 </html>
