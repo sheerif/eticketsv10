@@ -276,4 +276,120 @@ h1, h2, h3, h4, h5, h6 {
   .btn {
     display: none !important;
   }
+
+  .cookie-banner {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   Cookie Banner RGPD
+   ========================================================================== */
+
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-top: 1px solid #dee2e6;
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  animation: slideInUp 0.4s ease-out;
+}
+
+.cookie-content {
+  padding: 1rem 0;
+}
+
+.cookie-text {
+  color: #495057;
+}
+
+.cookie-text h6 {
+  color: #212529;
+  font-weight: 600;
+}
+
+.cookie-link {
+  color: var(--olympic-blue);
+  text-decoration: underline;
+}
+
+.cookie-link:hover {
+  color: #004499;
+}
+
+/* Animations pour la bannière */
+@keyframes slideInUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate__fadeInUp {
+  animation: slideInUp 0.4s ease-out;
+}
+
+.animate__fadeOutDown {
+  animation: slideOutDown 0.3s ease-in forwards;
+}
+
+@keyframes slideOutDown {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+/* Mobile responsiveness pour la bannière */
+@media (max-width: 767.98px) {
+  .cookie-banner .cookie-text {
+    margin-bottom: 1rem;
+  }
+  
+  .cookie-banner .col-12:last-child {
+    text-align: center !important;
+  }
+  
+  .cookie-banner .btn {
+    margin: 0.25rem;
+    width: 100%;
+    max-width: 150px;
+  }
+}
+
+/* Modal cookies styling */
+.modal-content {
+  border-radius: var(--border-radius);
+  border: none;
+  box-shadow: var(--shadow-md);
+}
+
+.modal-header {
+  border-bottom: 1px solid #e9ecef;
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.modal-footer {
+  border-top: 1px solid #e9ecef;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+/* Badges dans le modal */
+.badge.bg-success {
+  background-color: var(--olympic-green) !important;
+}
+
+.badge.bg-secondary {
+  background-color: #6c757d !important;
 }
